@@ -1,0 +1,7 @@
+Coloque aqui as fotos reais dos integrantes (quadradas, de preferência 400x400):
+
+  luigi.jpg
+  caua.jpg
+  gabriel.jpg
+
+Enquanto a foto não existir, a página Integrantes mostra as iniciais do nome.

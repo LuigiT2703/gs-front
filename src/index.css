@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+/* Identidade visual do ZelaCidade (direção A, "Cidade cuidada").
+   Cores conferidas para contraste AA: texto petroleo-700 sobre branco = 5,5:1;
+   tinta-900 sobre ambar-500 = 8,3:1. */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  --font-titulo: "Sora", "Inter", ui-sans-serif, sans-serif;
+
+  --color-petroleo-50: #F0FDFA;
+  --color-petroleo-100: #CCFBF1;
+  --color-petroleo-200: #99F6E4;
+  --color-petroleo-600: #0D9488;
+  --color-petroleo-700: #0F766E;
+  --color-petroleo-800: #115E59;
+  --color-petroleo-900: #134E4A;
+  --color-petroleo-950: #042F2E;
+
+  --color-ambar-100: #FEF3C7;
+  --color-ambar-400: #FBBF24;
+  --color-ambar-500: #F59E0B;
+  --color-ambar-700: #B45309;
+
+  --color-tinta-900: #0F172A;
+  --color-tinta-700: #334155;
+  --color-tinta-600: #475569;
+
+  --animate-surgir: surgir 0.25s ease-out;
+  @keyframes surgir {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-slate-50 font-sans text-tinta-900 antialiased;
+  }
+  h1, h2, h3 {
+    @apply font-titulo text-balance;
+  }
+  /* foco sempre visível para quem navega pelo teclado */
+  :focus-visible {
+    @apply outline-3 outline-offset-2 outline-ambar-500;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
