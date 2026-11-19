@@ -172,7 +172,7 @@ export function RegistrarOcorrencia() {
                 )}
               </Mensagem>
             )}
-          </div>
+        </div>
 
           <form onSubmit={handleSubmit(enviar)} noValidate className="space-y-7 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
             <p className="text-sm text-tinta-600">
@@ -183,8 +183,89 @@ export function RegistrarOcorrencia() {
               <legend className="font-medium">
                 Qual é o tipo do problema? <span className="text-red-700" aria-hidden="true">*</span>
               </legend>
-              <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+        <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {LISTA_CATEGORIAS.map((categoria) => (
                   <label
                     key={categoria}
-                    className="flex cursor-pointer items-center gap-3 rounded-xl border-2 border-slate-200 p-2.5 transition-colors hover:border-petroleo-200 has-checked:border-petroleo-700 has-checked:bg-petroleo-50 has-focus-visible:outline-3 has-focus-visible:outline-ambar-500">
+                    className="flex cursor-pointer items-center gap-3 rounded-xl border-2 border-slate-200 p-2.5 transition-colors hover:border-petroleo-200 has-checked:border-petroleo-700 has-checked:bg-petroleo-50 has-focus-visible:outline-3 has-focus-visible:outline-ambar-500"
+                    >
+                    <input type="radio" value={categoria} className="sr-only" {...register('categoria', { required: 'Escolha o tipo do problema.' })} />
+                    <IconeCategoria categoria={categoria} tamanho={20} />
+                    <span className="font-medium">{CATEGORIAS[categoria]}</span>
+                  </label>
+                ))}
+              </div>
+              {errors.categoria && (
+                <p id="categoria-erro" className="mt-2 text-sm font-medium text-red-700">
+                  {errors.categoria.message}
+                </p>
+              )}
+            </fieldset>
+
+            <Campo
+              id="descricao"
+              rotulo="O que aconteceu e onde?"
+              obrigatorio
+              ajuda={`${(valores.descricao ?? '').length}/300 · Inclua uma referência do local (ex.: em frente ao nº 120).`}
+              erro={errors.descricao?.message}
+            >
+              <textarea
+                id="descricao"
+                rows={3}
+                placeholder="Bueiro sem tampa na calçada em frente à escola municipal"
+                aria-invalid={!!errors.descricao}
+                aria-describedby={descricaoCampo('descricao', !!errors.descricao, true)}
+                className={classeCampo(!!errors.descricao)}
+                {...register('descricao', {
+                  required: 'Descreva o problema e o local.',
+                  validate: (v) => v.trim().length >= 10 || 'Conte um pouco mais: escreva pelo menos 10 letras, com o local.',
+                  maxLength: { value: 300, message: 'A descrição pode ter no máximo 300 caracteres.' },
+                })}
+              />
+            </Campo>
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              <Campo id="bairro" rotulo="Bairro" obrigatorio erro={errors.bairro?.message}>
+                <input
+                  id="bairro"
+                  type="text"
+                  placeholder="Jardim São Luís"
+                  aria-invalid={!!errors.bairro}
+                  aria-describedby={descricaoCampo('bairro', !!errors.bairro, false)}
+                  className={classeCampo(!!errors.bairro)}
+                  {...register('bairro', {
+                    required: 'Informe o bairro.',
+                    validate: (v) => v.trim().length >= 3 || 'O nome do bairro precisa ter pelo menos 3 letras.',
+                    maxLength: { value: 60, message: 'Use no máximo 60 caracteres.' },
+                  })}
+                />
+              </Campo>
+              <Campo
+                id="pessoasAfetadas"
+                rotulo="Pessoas afetadas por dia"
+                obrigatorio
+                ajuda="Uma estimativa de quantas pessoas passam por ali."
+                erro={errors.pessoasAfetadas?.message}
+              >
+                <input
+                  id="pessoasAfetadas"
+                  type="number"
+                  inputMode="numeric"
+                  min={1}
+                  max={100000}
+                  placeholder="200"
+                  aria-invalid={!!errors.pessoasAfetadas}
+                  aria-describedby={descricaoCampo('pessoasAfetadas', !!errors.pessoasAfetadas, true)}
+                  className={classeCampo(!!errors.pessoasAfetadas)}
+                  {...register('pessoasAfetadas', {
+                    required: 'Informe uma estimativa (pode ser aproximada).',
+                    validate: (v) => {
+                      const numero = Number(v)
+                      if (!Number.isInteger(numero)) return 'Use só números inteiros, sem vírgula.'
+                      if (numero < 1 || numero > 100000) return 'Informe um número entre 1 e 100.000.'
+                      return true
+                    },
+                  })}
+                />
+              </Campo>
+            </div>
