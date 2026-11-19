@@ -79,3 +79,17 @@ export function FormApoio({ ocorrencia, onSucesso }: FormApoioProps) {
               validate: (valor) => valor.trim().length >= 2 || 'O nome precisa ter pelo menos 2 letras.',
             })}
           />
+
+        </Campo>
+
+        <button
+          type="submit"
+          disabled={formState.isSubmitting}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-ambar-500 px-4 py-3 font-semibold text-tinta-900 transition-colors hover:bg-ambar-400 disabled:cursor-wait disabled:opacity-70"
+        >
+          <ThumbsUp size={18} aria-hidden="true" /> {formState.isSubmitting ? 'Enviando apoio…' : 'Também vi isso'}
+        </button>
+      </form>
+    </section>
+  )
+}
