@@ -77,8 +77,8 @@ export function RegistrarOcorrencia() {
     setValue,
     formState: { errors },
   } = useForm<FormOcorrencia>({ mode: 'onTouched', defaultValues: VALORES_INICIAIS })
-  
-    // watch() devolve o que está digitado agora: usado na prévia e no contador de letras.
+
+  // watch() devolve o que está digitado agora: usado na prévia e no contador de letras.
   const valores = watch()
   // Calçada sempre conta como acessibilidade (regra do sistema).
   const ehCalcada = valores.categoria === 'CALCADA_ACESSIBILIDADE'
@@ -136,12 +136,12 @@ export function RegistrarOcorrencia() {
 
   return (
     <>
-<TituloPagina
+      <TituloPagina
         sobretitulo="Registrar ocorrência"
         titulo="Relatar um problema"
         descricao="Conte o que você viu. Antes de enviar, você confere a prioridade, o prazo e o setor que vai receber."
       />
-    <Container className="grid gap-8 py-10 lg:grid-cols-[1fr_22rem]">
+      <Container className="grid gap-8 py-10 lg:grid-cols-[1fr_22rem]">
         <div className="min-w-0 space-y-6">
           <div ref={avisoRef}>
             {criada && (
@@ -172,7 +172,7 @@ export function RegistrarOcorrencia() {
                 )}
               </Mensagem>
             )}
-        </div>
+          </div>
 
           <form onSubmit={handleSubmit(enviar)} noValidate className="space-y-7 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
             <p className="text-sm text-tinta-600">
@@ -183,12 +183,12 @@ export function RegistrarOcorrencia() {
               <legend className="font-medium">
                 Qual é o tipo do problema? <span className="text-red-700" aria-hidden="true">*</span>
               </legend>
-        <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {LISTA_CATEGORIAS.map((categoria) => (
                   <label
                     key={categoria}
                     className="flex cursor-pointer items-center gap-3 rounded-xl border-2 border-slate-200 p-2.5 transition-colors hover:border-petroleo-200 has-checked:border-petroleo-700 has-checked:bg-petroleo-50 has-focus-visible:outline-3 has-focus-visible:outline-ambar-500"
-                    >
+                  >
                     <input type="radio" value={categoria} className="sr-only" {...register('categoria', { required: 'Escolha o tipo do problema.' })} />
                     <IconeCategoria categoria={categoria} tamanho={20} />
                     <span className="font-medium">{CATEGORIAS[categoria]}</span>
@@ -270,4 +270,139 @@ export function RegistrarOcorrencia() {
               </Campo>
             </div>
 
-            
+            <fieldset aria-describedby={errors.gravidade ? 'gravidade-erro' : 'gravidade-ajuda'}>
+              <legend className="font-medium">
+                Gravidade <span className="text-red-700" aria-hidden="true">*</span>
+              </legend>
+              <div className="mt-3 grid grid-cols-5 gap-2">
+                {['1', '2', '3', '4', '5'].map((nivel) => (
+                  <label
+                    key={nivel}
+                    className="flex cursor-pointer flex-col items-center rounded-xl border-2 border-slate-200 py-2.5 font-titulo text-lg font-bold transition-colors hover:border-petroleo-200 has-checked:border-petroleo-700 has-checked:bg-petroleo-700 has-checked:text-white has-focus-visible:outline-3 has-focus-visible:outline-ambar-500"
+                  >
+                    <input
+                      type="radio"
+                      value={nivel}
+                      className="sr-only"
+                      aria-label={`Gravidade ${nivel}: ${ROTULOS_GRAVIDADE[nivel]}`}
+                      {...register('gravidade', { required: 'Escolha a gravidade de 1 a 5.' })}
+                    />
+                    {nivel}
+                  </label>
+                ))}
+              </div>
+              <p id="gravidade-ajuda" className="mt-2 text-sm text-tinta-600">
+                {valores.gravidade ? `${valores.gravidade} = ${ROTULOS_GRAVIDADE[valores.gravidade]}` : '1 = incômodo leve · 3 = atrapalha a rotina · 5 = risco de acidente ou à saúde'}
+              </p>
+              {errors.gravidade && (
+                <p id="gravidade-erro" className="mt-1 text-sm font-medium text-red-700">
+                  {errors.gravidade.message}
+                </p>
+              )}
+            </fieldset>
+
+            <div className="grid gap-6 sm:grid-cols-2">
+              <fieldset>
+                <legend className="font-medium">
+                  Fica perto de escola, hospital ou posto de saúde? <span className="text-red-700" aria-hidden="true">*</span>
+                </legend>
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  {(['sim', 'nao'] as const).map((opcao) => (
+                    <label
+                      key={opcao}
+                      className="cursor-pointer rounded-xl border-2 border-slate-200 py-2.5 text-center font-semibold transition-colors hover:border-petroleo-200 has-checked:border-petroleo-700 has-checked:bg-petroleo-50 has-checked:text-petroleo-900 has-focus-visible:outline-3 has-focus-visible:outline-ambar-500"
+                    >
+                      <input type="radio" value={opcao} className="sr-only" {...register('perto', { required: 'Responda sim ou não.' })} />
+                      {opcao === 'sim' ? 'Sim' : 'Não'}
+                    </label>
+                  ))}
+                </div>
+                {errors.perto && <p className="mt-2 text-sm font-medium text-red-700">{errors.perto.message}</p>}
+              </fieldset>
+
+              <fieldset disabled={ehCalcada}>
+                <legend className="font-medium">
+                  Atrapalha cadeirantes, idosos ou carrinhos de bebê? <span className="text-red-700" aria-hidden="true">*</span>
+                </legend>
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  {(['sim', 'nao'] as const).map((opcao) => (
+                    <label
+                      key={opcao}
+                      className="cursor-pointer rounded-xl border-2 border-slate-200 py-2.5 text-center font-semibold transition-colors hover:border-petroleo-200 has-checked:border-petroleo-700 has-checked:bg-petroleo-50 has-checked:text-petroleo-900 has-disabled:cursor-not-allowed has-disabled:opacity-60 has-focus-visible:outline-3 has-focus-visible:outline-ambar-500"
+                    >
+                      <input
+                        type="radio"
+                        value={opcao}
+                        className="sr-only"
+                        {...register('acessibilidade', {
+                          // Se for calçada, não precisa responder (já conta como sim).
+                          validate: (valor, todos) => todos.categoria === 'CALCADA_ACESSIBILIDADE' || valor !== '' || 'Responda sim ou não.',
+                        })}
+                      />
+                      {opcao === 'sim' ? 'Sim' : 'Não'}
+                    </label>
+                  ))}
+                </div>
+                {ehCalcada && <p className="mt-2 text-sm text-petroleo-800">Problemas de calçada já contam como acessibilidade.</p>}
+                {errors.acessibilidade && !ehCalcada && <p className="mt-2 text-sm font-medium text-red-700">{errors.acessibilidade.message}</p>}
+              </fieldset>
+            </div>
+
+            <Campo id="nome" rotulo="Seu nome" obrigatorio ajuda="Usado só para evitar apoio repetido. Não aparece para ninguém." erro={errors.nome?.message}>
+              <input
+                id="nome"
+                type="text"
+                autoComplete="name"
+                placeholder="Ana Lima"
+                aria-invalid={!!errors.nome}
+                aria-describedby={descricaoCampo('nome', !!errors.nome, true)}
+                className={classeCampo(!!errors.nome)}
+                {...register('nome', {
+                  required: 'Digite seu nome.',
+                  validate: (v) => v.trim().length >= 2 || 'O nome precisa ter pelo menos 2 letras.',
+                  maxLength: { value: 80, message: 'Use no máximo 80 caracteres.' },
+                })}
+              />
+            </Campo>
+
+            <button
+              type="submit"
+              disabled={enviando}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-petroleo-700 px-6 py-3.5 text-lg font-semibold text-white transition-colors hover:bg-petroleo-800 disabled:cursor-wait disabled:opacity-70 sm:w-auto"
+            >
+              <Send size={20} aria-hidden="true" /> {enviando ? 'Registrando…' : 'Confirmar registro'}
+            </button>
+          </form>
+        </div>
+
+        <aside className="lg:sticky lg:top-24 lg:self-start" aria-labelledby="previa-titulo">
+          <div className="rounded-2xl border border-petroleo-200 bg-petroleo-50 p-5">
+            <h2 id="previa-titulo" className="text-lg font-bold">
+              Prévia da prioridade
+            </h2>
+            {previaPronta ? (
+              <div className="mt-4 space-y-4" aria-live="polite">
+                <div className="flex flex-wrap items-center gap-2">
+                  <BadgePrioridade classe={classePrevia} pontos={pontosPrevia} grande />
+                </div>
+                <BarraPrioridade pontos={pontosPrevia} parcelas={parcelasPontos(previa)} />
+                <dl className="space-y-2 border-t border-petroleo-200 pt-4 text-sm">
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-tinta-600">Prazo recomendado</dt>
+                    <dd className="font-semibold">{prazoRecomendado(classePrevia)}</dd>
+                  </div>
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-tinta-600">Vai para</dt>
+                    <dd className="text-right font-semibold">{setorResponsavel(valores.categoria as Categoria)}</dd>
+                  </div>
+                </dl>
+              </div>
+            ) : (
+              <p className="mt-3 text-sm text-tinta-600">Escolha o tipo do problema e a gravidade para ver os pontos, o prazo e o setor.</p>
+            )}
+          </div>
+        </aside>
+      </Container>
+    </>
+  )
+}
