@@ -20,9 +20,9 @@ Com 80 pontos ou mais a ocorrência é **URGENTE** (48 h); de 55 a 79, **ALTA** 
 ## Links
 | O quê | URL |
 |---|---|
-| Repositório GitHub | `[LINK DO GITHUB]` |
-| Deploy na Vercel | `[LINK DA VERCEL]` |
-| API Java (Render) | `[LINK DA API]` |
+| Repositório GitHub | https://github.com/LuigiT2703/gs-front |
+| Deploy na Vercel | https://zelacidade-taupe.vercel.app |
+| API Java (Render) | https://zelacidade-api.onrender.com |
 | Vídeo (YouTube, até 3 min) | `[LINK DO YOUTUBE]` |
 
 ## Tecnologias
